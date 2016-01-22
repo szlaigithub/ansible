@@ -1,0 +1,6 @@
+---
+ - name: hosts
+   hosts: local
+
+   tasks:
+    - include: tasks/getLog.yml

@@ -1,0 +1,8 @@
+---
+ - name: hosts or gropu
+   hosts: ubuntu
+
+   tasks:
+    - include: tasks/controlRe.yml
+#    - include: tasks/sendemial.yml
+

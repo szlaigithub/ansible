@@ -1,0 +1,3 @@
+---
+ - name: 清空远端控制端up.log文件
+   shell: echo "" > /etc/ansible/playbooks/log/up.log

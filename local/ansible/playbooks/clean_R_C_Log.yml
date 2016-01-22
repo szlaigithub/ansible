@@ -1,0 +1,6 @@
+---
+ - name: hosts or group
+   hosts: ubuntu
+
+   tasks:
+    - include: tasks/cleanLog.yml

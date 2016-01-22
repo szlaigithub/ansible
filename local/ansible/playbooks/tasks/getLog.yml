@@ -1,0 +1,10 @@
+---
+# - name: 取状态
+#   shell: cat  /etc/ansible/log/up.log
+# - name: 传状态文件回到控制端
+#   shell: rsync -azP --port=873   --password-file=/etc/rsyncd/rs.pass  root@192.168.158.128::log /etc/ansible/log/
+# - name: 删除文件
+#   shell: cd /etc/ansible/log && rm -rf up.log
+ - name: 传状态文件回到控制端
+   shell: scp -i /root/.ssh/id_rsa   root@192.168.158.128:/etc/ansible/playbooks/log/up.log  /etc/ansible/playbooks/log/
+

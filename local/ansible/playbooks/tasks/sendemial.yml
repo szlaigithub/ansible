@@ -1,0 +1,5 @@
+---
+ - name: sendmail
+   shell: "cat /etc/ansible/log/up.log | mail -s '更新代码' shenzhonglin@ltbl.cn"
+ - name: delete logfile
+   shell: echo "" > /etc/ansible/log/up.log
