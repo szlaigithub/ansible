@@ -1,0 +1,12 @@
+---
+ - name: hosts name or grops
+   hosts: ubuntu
+
+   vars:
+    path: /etc/nginx/sites-enabled/test
+    path1: /var/www/test
+
+   tasks:
+    - name: mkdir path1
+      file: path={{ path1 }} owner=www-data group=www-data state=directory
+

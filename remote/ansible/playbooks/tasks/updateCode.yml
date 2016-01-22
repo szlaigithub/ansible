@@ -1,0 +1,5 @@
+---
+ - name: into /var/www/project
+   shell:  "cd /var/www/project  &&  git pull"
+#   action: git repo=git@git.coding.net:kimsen/test.git dest=/var/www/project clone=no update=yes
+#   ignore_errors: True

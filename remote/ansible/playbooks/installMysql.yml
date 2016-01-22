@@ -1,0 +1,6 @@
+---
+ - name: hosts name or groups
+   hosts: ubuntu
+
+   tasks:
+    - include: tasks/setup_mysql.yml

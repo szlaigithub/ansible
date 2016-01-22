@@ -1,0 +1,28 @@
+---
+ - name: hosts name or groups
+   hosts: ubuntu
+
+   vars:
+      #php vars
+      delete_default_pool: true
+      php_name: www-data
+      php_user: www-data
+      php_group: www-data
+      php_listen: 127.0.0.1:9000
+      listen_allowed_clients: 127.0.0.1
+      pm_type: dynamic
+      pm_max_children: 5
+      pm_start_servers: 2
+      pm_min_spare_servers: 1
+      pm_max_spare_servers: 3
+      pm_process_idle_timeout: 10s
+      pm_max_requests: 500
+      php_flag: ~
+      php_admin_flag: ~
+      php_admin_value: ~
+
+   tasks:
+      - include: tasks/setup-php5.yml
+   
+   handlers:
+      - include: handlers/handlers.yml

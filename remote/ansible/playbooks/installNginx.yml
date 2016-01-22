@@ -1,0 +1,41 @@
+--- 
+ - name: hosts name or groups
+   hosts: ubuntu
+   
+   vars:
+     #php var
+     delete_default_pool: true
+     php_name: www-data
+     php_user: www-data
+     php_group: www-data
+     php_listen: 127.0.0.1:9000
+     listen_allowed_clients: 127.0.0.1
+     pm_type: dynamic
+     pm_max_children: 5
+     pm_start_servers: 2
+     pm_min_spare_servers: 1
+     pm_max_spare_servers: 3
+     pm_process_idle_timeout: 10s
+     pm_max_requests: 500
+     php_flag: ~
+     php_admin_flag: ~
+     php_admin_value: ~
+     #nginx confi var
+     nginx_user: www-data
+     delete_default_vhost: true
+     worker_processes: 1              # 进程数，请配置一个核开启一个进程
+     worker_connections: 768          # 每个进程最大连接数，不单单是客户端的连接，包括反向代理等所有连接，而且不能超出 worker_rlimit_nofile 配置数
+     worker_rlimit_nofile: 768 
+     #nginx vhost var
+     vhost_listen: 80
+     servername: 127.0.0.1
+     root: /var/www/project
+     vhost_name: project
+    
+   tasks:
+     - include: tasks/setup-nginx.yml 
+     - include: tasks/setup-vhost.yml 
+#     - include: tasks/setup-test.yml
+    
+   handlers:
+     - include: handlers/handlers.yml

@@ -1,0 +1,92 @@
+#nginx.conf
+user {{ nginx_user }};
+worker_processes {{ worker_processes }};             # 进程数，请配置一个核开启一个进程
+# worker_cpu_affinity 01;                         # 每个进程绑定指定的核，单核就不用配置了，有多少核就有多少位二进制数，示例是双核 CPU
+worker_rlimit_nofile {{ worker_rlimit_nofile }};     # 改变总进程打开的最大文件数， 这个与内核有关，ulimit -n 可以查看内核最大支持，如果需要修改支持可以编辑 /etc/security/limits.conf 文件
+pid /var/run/nginx.pid;
+
+events {
+    use epoll;                                       # 请看 linux epoll 相关文档，多路复用IO接口提升系统IO性能
+    worker_connections {{ worker_connections }};     # 每个进程最大连接数，不单单是客户端的连接，包括反向代理等所有连接，而且不能超出 worker_rlimit_nofile 配置数
+}
+
+http {
+
+    ##
+    # base config
+    ##
+
+    sendfile off;                                    # nginx在支持了sendfile系统调用后，避免了内核层与用户层的上线文切换（content swith）工作，大大减少了系统性能的开销。 但是大文件会出现问题
+    # tcp_nodelay: on;                               # 保持默认值就好
+    # tcp_nopush: off;                               # 没开 sendfile 无效
+    include /etc/nginx/mime.types;
+    default_type application/octet-stream;
+
+
+    ##
+    # Open File Cache
+    # http://wiki.nginx.org/HttpCoreModule#open_file_cache
+    ##
+
+    open_file_cache max=10000 inactive=30s;          # max 是最大缓存对手文件 inactive 缓存过期时间
+    open_file_cache_valid    30s;                    # 检查 cache 时间
+    open_file_cache_min_uses 1;                      # 用过最小次数然后更新生存时间
+    open_file_cache_errors   on;                     # 是否允许 open_file_cache 检查错误信息
+
+
+    ##
+    # buffer
+    ##
+
+    client_header_buffer_size 4k;                    # 客户浏览器请求的 header buffer, 如果大于这个值会写临时文件 
+    client_body_buffer_size  128k;                   # 客户浏览器请求的 body buffer, 如果大于这个值会写临时文件 
+
+    ##
+    # body size
+    ##
+
+    client_max_body_size 2m;
+
+    ##
+    # set time out
+    ##
+
+    keepalive_timeout 20s;                            # 保持连接的时间，这个值关系到可以处理请求的数量，前提是在这个时间内可以完成用户的请求
+    client_header_timeout 20s;                        # 客户浏览器发送 header 超时时间
+    client_body_timeout 60s;                          # 客户浏览器发送 body 超时时间
+
+    ##
+    # Safe Settings
+    ##
+
+    server_tokens off;                               # 是否显示 nginx 版本
+
+
+    ##
+    # Logging Settings
+    ##
+
+    access_log /var/log/nginx/access.log;           # nginx 的所有请求日志， 只要有请求都会写进 log 所以占用大量IO，生产环境取消
+    error_log /var/log/nginx/error.log;             # 设置 warn 级别即可
+
+    ##
+    # Gzip Settings
+    #
+    # javascript & css 压缩也是一个很好的方法
+    ##
+
+    gzip on;
+    gzip_disable "msie6";
+    gzip_vary on;                                    # 是否在header 显示压缩方式
+    gzip_proxied any;
+    gzip_comp_level 6;                               # 压缩等级 1-9
+    gzip_buffers 16 8k;
+    gzip_http_version 1.1;
+    gzip_types text/plain text/css application/json application/x-javascript text/xml application/xml application/xml+rss text/javascript;
+
+    ##
+    # Virtual Host Configs
+    ##
+    include /etc/nginx/conf.d/*.conf;
+    include /etc/nginx/sites-enabled/*;
+}

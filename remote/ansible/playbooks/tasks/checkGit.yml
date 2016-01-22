@@ -1,0 +1,11 @@
+---
+ - name: 检查是否安装了git
+   #shell: "dpkg -l | grep git | head -n 1 | awk '{print $2}' | wc -l"
+   shell: "/usr/bin/dpkg -l git | grep git | awk '{print $1}'"
+   register: result
+   ignore_errors: True
+ 
+   
+ - name: 当条件满足是执行
+   action: apt name=git state=installed
+   when: result.stdout ==  'rc'

@@ -1,0 +1,10 @@
+---
+  - name: add nginx {{ ansible_nodename }} vhost
+    action: template src=templates/vhost.j2 dest=/etc/nginx/sites-enabled/{{ ansible_nodename }}
+    notify:
+      - restart nginx
+
+  #- name: link nginx {{ vhost_name }} vhost in sites-enabled
+  #  action: file src=/etc/nginx/sites-available/{{ vhost_name }} dest=/etc/nginx/sites-enabled/{{ vhost_name }} state=link
+  #  notify:
+  #    - restart nginx

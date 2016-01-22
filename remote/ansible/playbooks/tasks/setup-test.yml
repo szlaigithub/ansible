@@ -1,0 +1,5 @@
+---
+ - name: add {{ ansible_nodename }} test
+   action: template src=templates/index.php.j2 dest=/var/www/test/index.php
+   notify:
+    - restart nginx

@@ -1,0 +1,9 @@
+---
+ - name: restart nginx
+   action: service name=nginx pattern=/etc/init.d/nginx state=restarted enabled=yes
+  
+ - name: restart php5-fpm
+   action: service name=php5-fpm state=restarted enabled=yes
+
+ - name: 
+   action: service name=mysql state=restarted enabled=yes

@@ -1,0 +1,33 @@
+server {
+        listen {{ vhost_listen }};
+
+        root {{ root }};
+        index index.php index.html index.htm;
+
+        server_name {{ servername }};
+
+        location / {
+            try_files $uri $uri/ /index.php?$query_string;
+        }
+
+        location ~* \.(png|jpg|jpeg|gif|ico|swf)$ {
+            expires max;
+        }
+
+        location ~ \.php$ {
+            fastcgi_split_path_info ^(.+\.php)(/.+)$;
+            fastcgi_pass 127.0.0.1:9000;
+            fastcgi_index index.php;
+            fastcgi_connect_timeout 300;
+            fastcgi_send_timeout 300;
+            fastcgi_read_timeout 300;
+            fastcgi_buffer_size 64k;
+            fastcgi_buffers 4 64k;
+            fastcgi_busy_buffers_size 128k;
+            fastcgi_temp_file_write_size 128k;
+            include /etc/nginx/fastcgi_params;
+            fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+            fastcgi_param PATH_INFO       $fastcgi_path_info;
+            fastcgi_param PATH_TRANSLATED $document_root$fastcgi_path_info;
+        }
+}

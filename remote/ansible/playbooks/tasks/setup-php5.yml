@@ -1,0 +1,6 @@
+---
+ - name: install php5-fpm
+   action: apt name=php5-fpm
+ - name: install php5-cli
+   action: apt name=php5-cli
+ 

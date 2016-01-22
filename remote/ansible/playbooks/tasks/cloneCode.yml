@@ -1,0 +1,8 @@
+---
+# - name: su www-data
+#   shell: cd /var/www && su -s /bin/bash www-data &&  git clone git@git.coding.net:kimsen/test.git 
+ - name: Clone remote code 
+   #action: git repo=git@git.coding.net:kimsen/test.git dest=/var/www/project 
+   action: git repo=git@git.coding.net:kimsen/test.git dest=/var/www/project clone=yes update=no
+# - name: Change project directory permiss
+#   shell: cd /var && chown www-data:www-data www -R

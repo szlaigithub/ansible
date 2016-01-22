@@ -1,0 +1,6 @@
+---
+ - name: hosts or groups
+   hosts: ubuntu
+
+   tasks:
+    - include: tasks/cloneCode.yml

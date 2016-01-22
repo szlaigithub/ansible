@@ -1,0 +1,9 @@
+---
+ - name: hosts or group
+   hosts: ubuntu
+   
+   vars:
+    project1: [test,project]   
+
+   tasks: 
+    - include: tasks/updateCode.yml
